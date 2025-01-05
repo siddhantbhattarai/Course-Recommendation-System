@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Recommendation System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f3f7;
+        }
+
+        header {
+            background-color: #4CAF50;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select,
+        button,
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .result,
+        .feedback-form {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+
+        .immersive-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .immersive-buttons a {
+            background-color: #0078d4;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .immersive-buttons a:hover {
+            background-color: #005da0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        Course Recommendation System
+    </header>
+
+    <div class="container">
+        <h2>Find Your Perfect Course</h2>
+        <form id="recommend-form">
+            <div class="form-group">
+                <label for="interest">Area of Interest</label>
+                <select id="interest">
+                    <option value="">-- Select Area of Interest --</option>
+                    <option value="Cybersecurity">Cybersecurity</option>
+                    <option value="E-Commerce Development">E-Commerce Development</option>
+                    <option value="DevOps">DevOps</option>
+                    <option value="Computer Vision">Computer Vision</option>
+                    <option value="Cloud Computing">Cloud Computing</option>
+                    <option value="Quantum Computing">Quantum Computing</option>
+                    <option value="App Development">App Development</option>
+                    <option value="Data Engineering">Data Engineering</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Artificial Intelligence">Artificial Intelligence</option>
+                    <option value="Big Data Analytics">Big Data Analytics</option>
+                    <option value="Game Development">Game Development</option>
+                    <option value="Natural Language Processing">Natural Language Processing</option>
+                    <option value="Full-Stack Development">Full-Stack Development</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="IoT Development">IoT Development</option>
+                    <option value="Networking">Networking</option>
+                    <option value="Blockchain">Blockchain</option>
+                    <option value="UI/UX Design">UI/UX Design</option>
+                    <option value="Embedded Systems">Embedded Systems</option>
+                    <option value="AR/VR Development">AR/VR Development</option>
+                    <option value="Business Intelligence">Business Intelligence</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Software Testing">Software Testing</option>
+                    <option value="Digital Marketing">Digital Marketing</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="goal">Career Goal</label>
+                <select id="goal">
+                    <option value="">-- Select Career Goal --</option>
+                    <option value="Cybersecurity">Cybersecurity</option>
+                    <option value="Data Engineering">Data Engineering</option>
+                    <option value="E-Commerce Development">E-Commerce Development</option>
+                    <option value="App Development">App Development</option>
+                    <option value="Artificial Intelligence">Artificial Intelligence</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="Full-Stack Development">Full-Stack Development</option>
+                    <option value="Digital Marketing">Digital Marketing</option>
+                    <option value="Networking">Networking</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="learning_style">Preferred Learning Style</label>
+                <select id="learning_style">
+                    <option value="">-- Select Learning Style --</option>
+                    <option value="Visual">Visual</option>
+                    <option value="Reading/Writing">Reading/Writing</option>
+                    <option value="Collaborative">Collaborative</option>
+                    <option value="Hands-on">Hands-on</option>
+                </select>
+            </div>
+            <button type="button" onclick="getRecommendation()">Get Course Recommendation</button>
+        </form>
+
+        <div class="result" id="recommendation">
+            <p><strong>Recommended Course:</strong> <span id="course-name"></span></p>
+            <p id="recommendation-message"></p>
+            <p><strong>Course Description:</strong> <span id="course-description"></span></p>
+            <div class="immersive-buttons">
+                <a id="vr-link" target="_blank" style="display: none;">View in VR/AR</a>
+                <a id="preview-video" target="_blank" style="display: none;">Watch Intro Video</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 AI & Metaverse Learning Solutions. All Rights Reserved.
+    </footer>
+
+    <script>
+        function getRecommendation() {
+            const interest = document.getElementById('interest').value.trim();
+            const goal = document.getElementById('goal').value.trim();
+            const learningStyle = document.getElementById('learning_style').value.trim();
+
+            if (!interest || !goal || !learningStyle) {
+                alert('Please select all fields before submitting.');
+                return;
+            }
+
+            fetch('/recommend-course', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    interest: interest,
+                    goal: goal,
+                    learning_style: learningStyle
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('recommendation').style.display = 'block';
+                    document.getElementById('course-name').innerText = data.recommended_course || 'N/A';
+                    document.getElementById('recommendation-message').innerText = data.message || '';
+                    document.getElementById('course-description').innerText = data.immersive_details.description || 'No description available.';
+
+                    const vrLink = document.getElementById('vr-link');
+                    const previewVideo = document.getElementById('preview-video');
+
+                    vrLink.href = data.immersive_details.vr_link;
+                    previewVideo.href = data.immersive_details.preview_video;
+
+                    vrLink.style.display = data.immersive_details.vr_link ? 'inline-block' : 'none';
+                    previewVideo.style.display = data.immersive_details.preview_video ? 'inline-block' : 'none';
+                })
+                .catch(error => {
+                    alert('Something went wrong. Please try again later.');
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
+
